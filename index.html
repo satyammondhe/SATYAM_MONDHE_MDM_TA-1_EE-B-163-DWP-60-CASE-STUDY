@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Youtify — Premium music streaming with Apple-inspired liquid glass design" />
+  <title>Youtify</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- ══ HIDDEN YOUTUBE AUDIO ENGINE ══════════════════════════════════════ -->
+  <div id="yt-player-wrapper" aria-hidden="true" focusable="false">
+    <div id="yt-player"></div>
+  </div>
+
+  <!-- ══ ROOT APP SHELL ═════════════════════════════════════════════════── -->
+  <div id="app">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         LEFT SIDEBAR — Desktop only (hidden on mobile)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <aside id="sidebar">
+      <div class="sidebar-inner">
+        <!-- Logo -->
+        <div class="sidebar-logo">
+          <div class="logo-mark">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.8" />
+              <polygon points="8,6.5 15.5,10 8,13.5" fill="currentColor" />
+            </svg>
+          </div>
+          <span class="logo-text">Youtify</span>
+        </div>
+
+        <!-- Library Section -->
+        <div class="sidebar-section">
+          <p class="sidebar-section-label">Library</p>
+          <nav class="sidebar-nav">
+            <button class="sidebar-link active" data-tab="home">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              <span>Browse</span>
+            </button>
+            <button class="sidebar-link" data-tab="charts">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+              </svg>
+              <span>Charts</span>
+            </button>
+            <button class="sidebar-link" data-tab="youtube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <span>Search</span>
+            </button>
+            <button class="sidebar-link" data-tab="library">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              </svg>
+              <span>Library</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- My Music -->
+        <div class="sidebar-section">
+          <p class="sidebar-section-label">My Music</p>
+          <nav class="sidebar-nav">
+            <button class="sidebar-link" data-tab="library" data-sub="recent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span>Recently Played</span>
+            </button>
+            <button class="sidebar-link" data-tab="library" data-sub="liked">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+              <span>Favorite Songs</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Equalizer at bottom of sidebar -->
+        <div class="sidebar-footer">
+          <div class="equalizer" id="equalizer-anim" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         MOBILE HEADER — Only visible on mobile
+         ═══════════════════════════════════════════════════════════════════ -->
+    <header id="app-header">
+      <div class="header-inner">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.8" />
+              <polygon points="8,6.5 15.5,10 8,13.5" fill="currentColor" />
+            </svg>
+          </div>
+          <span class="logo-text">Youtify</span>
+        </div>
+        <div class="header-right">
+          <div class="equalizer mobile-eq" id="equalizer-anim-mobile" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <button class="icon-btn" id="profile-btn" aria-label="Profile">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         MAIN CONTENT AREA
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main id="main-content">
+
+      <!-- Desktop Top Bar (breadcrumb/filter) -->
+      <div id="desktop-topbar">
+        <div class="topbar-left">
+          <span class="breadcrumb-active" id="breadcrumb-label">Browse</span>
+        </div>
+        <div class="topbar-right">
+          <div class="desktop-search-box" id="desktop-search-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="search" id="desktop-search-input" placeholder="Search…" autocomplete="off"
+              spellcheck="false" />
+          </div>
+          <button class="icon-btn" id="desktop-profile-btn" aria-label="Profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ════ HOME TAB ══════════════════════════════════════════════════ -->
+      <section id="tab-home" class="tab-section active" role="main">
+        <div class="tab-inner">
+
+          <!-- Hero Banner -->
+          <div class="hero-banner" id="hero-banner">
+            <div class="hero-badge">CURATED PLAYLIST</div>
+            <h1 class="hero-title">BLINDING LIGHT</h1>
+            <p class="hero-desc">Enjoy vivid emotions with this stunning music album. Each track is a story.</p>
+            <div class="hero-meta">
+              <span class="hero-likes">❤ 83,012 Likes</span>
+              <span class="hero-info">· 15 Songs, 78 min 43 sec</span>
+            </div>
+          </div>
+
+          <!-- Popular Artists -->
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">Popular artists</h2>
+              <button class="see-all-btn">See all</button>
+            </div>
+            <div class="artists-scroll" id="artists-scroll">
+              <button class="artist-chip" data-query="The Weeknd best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#4a0e3a,#9b1b1b)"><span>🎤</span>
+                </div>
+                <span class="artist-name">The Weeknd</span>
+              </button>
+              <button class="artist-chip" data-query="21 Savage best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#1a1a1a,#3d3d3d)"><span>🔥</span>
+                </div>
+                <span class="artist-name">21 Savage</span>
+              </button>
+              <button class="artist-chip" data-query="6ix9ine best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#ff4500,#cc3700)"><span>🌈</span>
+                </div>
+                <span class="artist-name">6ix9ine</span>
+              </button>
+              <button class="artist-chip" data-query="Travis Scott best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#2d1f0e,#5c3d1e)"><span>🌵</span>
+                </div>
+                <span class="artist-name">Travis Scott</span>
+              </button>
+              <button class="artist-chip" data-query="ODUMODUBLVCK best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#0a0a0a,#2a2a2a)"><span>💀</span>
+                </div>
+                <span class="artist-name">ODUMODUBLVCK</span>
+              </button>
+              <button class="artist-chip" data-query="Drake best songs playlist">
+                <div class="artist-avatar" style="background:linear-gradient(135deg,#1a0533,#3d1166)"><span>🦉</span>
+                </div>
+                <span class="artist-name">Drake</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Plays -->
+          <div id="home-quick-plays" style="display:none;">
+            <div class="section-header">
+              <h2 class="section-title">Jump back in</h2>
+            </div>
+            <div id="quick-plays-container" class="quick-grid"></div>
+          </div>
+
+          <!-- Curated Radios -->
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">Curated Radios</h2>
+              <button class="see-all-btn">See all</button>
+            </div>
+            <div class="horizontal-scroll" id="radios-scroll">
+              <button class="radio-card" data-query="chill vibes music 2024 playlist"
+                style="--grad:linear-gradient(145deg,#0d7377,#0a192f)">
+                <div class="radio-emoji">🌊</div>
+                <p class="radio-title">Chill Vibes</p>
+                <p class="radio-sub">400K listeners</p>
+              </button>
+              <button class="radio-card" data-query="hip hop bangers playlist 2024"
+                style="--grad:linear-gradient(145deg,#6b2fa0,#1a0a2e)">
+                <div class="radio-emoji">🔥</div>
+                <p class="radio-title">Hip-Hop Bangers</p>
+                <p class="radio-sub">1.2M listeners</p>
+              </button>
+              <button class="radio-card" data-query="lofi hip hop beats to study relax"
+                style="--grad:linear-gradient(145deg,#0f4c3a,#0a192f)">
+                <div class="radio-emoji">☕</div>
+                <p class="radio-title">Late Night Lo-Fi</p>
+                <p class="radio-sub">890K listeners</p>
+              </button>
+              <button class="radio-card" data-query="top pop hits playlist 2024"
+                style="--grad:linear-gradient(145deg,#8b1a4a,#2d0415)">
+                <div class="radio-emoji">✨</div>
+                <p class="radio-title">Pop Hits</p>
+                <p class="radio-sub">2.1M listeners</p>
+              </button>
+              <button class="radio-card" data-query="classic rock greatest hits playlist"
+                style="--grad:linear-gradient(145deg,#3d2600,#1a0a08)">
+                <div class="radio-emoji">🎸</div>
+                <p class="radio-title">Rock Classics</p>
+                <p class="radio-sub">560K listeners</p>
+              </button>
+              <button class="radio-card" data-query="edm electronic dance music mix 2024"
+                style="--grad:linear-gradient(145deg,#0a3d66,#001433)">
+                <div class="radio-emoji">⚡</div>
+                <p class="radio-title">EDM Drops</p>
+                <p class="radio-sub">780K listeners</p>
+              </button>
+            </div>
+          </div>
+
+          <!-- Recommended For You -->
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">Recommended for You</h2>
+              <button class="see-all-btn">See all</button>
+            </div>
+            <div class="rec-grid">
+              <button class="rec-card" data-query="Taylor Swift Anti-Hero official video" data-title="Anti-Hero"
+                data-artist="Taylor Swift">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#4a0e3a,#9b1b1b)"><span>🌟</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">Anti-Hero</p>
+                  <p class="rec-artist">Taylor Swift</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+              <button class="rec-card" data-query="SZA Kill Bill official video" data-title="Kill Bill"
+                data-artist="SZA">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#0d1f3c,#1e3a5f)"><span>💫</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">Kill Bill</p>
+                  <p class="rec-artist">SZA</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+              <button class="rec-card" data-query="Drake 21 Savage Rich Flex official" data-title="Rich Flex"
+                data-artist="Drake, 21 Savage">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#1a1a00,#3d3d00)"><span>💎</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">Rich Flex</p>
+                  <p class="rec-artist">Drake, 21 Savage</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+              <button class="rec-card" data-query="Doja Cat Paint The Town Red official" data-title="Paint The Town Red"
+                data-artist="Doja Cat">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#3d0000,#660000)"><span>🎨</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">Paint The Town Red</p>
+                  <p class="rec-artist">Doja Cat</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+              <button class="rec-card" data-query="The Weeknd Blinding Lights official" data-title="Blinding Lights"
+                data-artist="The Weeknd">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#1a0533,#3d1166)"><span>🌃</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">Blinding Lights</p>
+                  <p class="rec-artist">The Weeknd</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+              <button class="rec-card" data-query="Harry Styles As It Was official video" data-title="As It Was"
+                data-artist="Harry Styles">
+                <div class="rec-card-art" style="background:linear-gradient(135deg,#001a33,#003366)"><span>🌊</span>
+                </div>
+                <div class="rec-card-info">
+                  <p class="rec-title">As It Was</p>
+                  <p class="rec-artist">Harry Styles</p>
+                </div>
+                <div class="rec-play-btn" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"
+                    fill="currentColor">
+                    <polygon points="2,1 11,6 2,11" />
+                  </svg></div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ════ TOP CHARTS TAB ════════════════════════════════════════════ -->
+      <section id="tab-charts" class="tab-section" role="main" aria-hidden="true">
+        <div class="tab-inner">
+          <div class="tab-page-header">
+            <h1 class="tab-page-title">Top Charts</h1>
+            <p class="tab-page-sub">Updated weekly</p>
+          </div>
+          <div class="charts-toggle-wrapper">
+            <div class="charts-toggle" id="charts-toggle" data-active="spotify">
+              <div class="toggle-pill"></div>
+              <button class="toggle-btn active" data-target="spotify">Spotify Trends</button>
+              <button class="toggle-btn" data-target="global">Global</button>
+            </div>
+          </div>
+          <div id="panel-spotify" class="charts-panel active">
+            <div class="charts-list" id="spotify-list"></div>
+          </div>
+          <div id="panel-global" class="charts-panel">
+            <div class="charts-list" id="global-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════ YOUTUBE SEARCH TAB ════════════════════════════════════════ -->
+      <section id="tab-youtube" class="tab-section" role="main" aria-hidden="true">
+        <div class="tab-inner">
+          <div class="tab-page-header">
+            <h1 class="tab-page-title">Search</h1>
+            <p class="tab-page-sub">Stream any song instantly</p>
+          </div>
+          <!-- Search bar (mobile) -->
+          <div class="search-wrapper mobile-search">
+            <div class="search-box" id="search-box">
+              <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="search" id="yt-search-input" class="search-input"
+                placeholder="Search songs, artists, albums…" autocomplete="off" spellcheck="false"
+                enterkeyhint="search" />
+              <button class="search-clear-btn" id="search-clear" aria-label="Clear" style="display:none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  stroke-linecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <button class="search-go-btn" id="yt-search-btn" aria-label="Go">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+          <div id="api-key-warning" class="api-warning" style="display:none;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>Set your <code>YOUTUBE_API_KEY</code> in <code>app.js</code> to enable live search.</span>
+          </div>
+          <div id="search-idle-state" class="search-idle">
+            <div class="idle-icon">🎵</div>
+            <p class="idle-title">Search for music</p>
+            <p class="idle-sub">Find any song, artist, or album on YouTube</p>
+          </div>
+          <div id="search-loading" class="search-loading" style="display:none;">
+            <div class="skeleton-item">
+              <div class="skeleton sk-thumb"></div>
+              <div class="sk-lines">
+                <div class="skeleton sk-line wide"></div>
+                <div class="skeleton sk-line narrow"></div>
+              </div>
+            </div>
+            <div class="skeleton-item">
+              <div class="skeleton sk-thumb"></div>
+              <div class="sk-lines">
+                <div class="skeleton sk-line wide"></div>
+                <div class="skeleton sk-line narrow"></div>
+              </div>
+            </div>
+            <div class="skeleton-item">
+              <div class="skeleton sk-thumb"></div>
+              <div class="sk-lines">
+                <div class="skeleton sk-line wide"></div>
+                <div class="skeleton sk-line narrow"></div>
+              </div>
+            </div>
+          </div>
+          <div id="search-results" class="results-list" role="list"></div>
+        </div>
+      </section>
+
+      <!-- ════ LIBRARY TAB ══════════════════════════════════════════════ -->
+      <section id="tab-library" class="tab-section" role="main" aria-hidden="true">
+        <div class="tab-inner">
+          <div class="tab-page-header">
+            <h1 class="tab-page-title">Your Library</h1>
+          </div>
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">Recently Played</h2>
+              <button class="subtle-btn" id="clear-history-btn">Clear all</button>
+            </div>
+            <div id="recently-played-list">
+              <div class="empty-state" id="rp-empty-state">
+                <div class="empty-icon">🎧</div>
+                <p class="empty-title">No history yet</p>
+                <p class="empty-sub">Songs you play will appear here</p>
+              </div>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-header">
+              <h2 class="section-title">Playlists</h2>
+            </div>
+            <div class="playlists-grid">
+              <button class="playlist-card create-card">
+                <div class="pl-art create-art">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </div>
+                <p class="pl-title">New Playlist</p>
+                <p class="pl-sub">Create your mix</p>
+              </button>
+              <button class="playlist-card liked-card">
+                <div class="pl-art liked-art">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
+                <p class="pl-title">Liked Songs</p>
+                <p class="pl-sub" id="liked-count">0 songs</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main><!-- /#main-content -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         NOW PLAYING PANEL — Desktop right sidebar
+         ═══════════════════════════════════════════════════════════════════ -->
+    <aside id="now-playing-panel">
+      <div class="np-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18V5l12-2v13" />
+          <circle cx="6" cy="18" r="3" />
+          <circle cx="18" cy="16" r="3" />
+        </svg>
+        <span>Now Playing</span>
+      </div>
+      <div class="np-art-wrap" id="np-art-wrap">
+        <div class="np-art-fallback" id="np-art-fallback">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" opacity="0.2">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+          </svg>
+        </div>
+        <img id="np-art-img" class="np-art-img" src="" alt="" style="display:none;" />
+      </div>
+      <div class="np-track-info">
+        <p class="np-track-title" id="np-track-title">No track selected</p>
+        <p class="np-track-artist" id="np-track-artist">—</p>
+      </div>
+      <div class="np-lyrics-container">
+        <div class="np-queue-header">
+          <span>Lyrics</span>
+        </div>
+        <div class="np-lyrics-content" id="np-lyrics-content">
+          <p class="lyrics-placeholder" style="font-size:0.78rem;color:var(--text-3);padding:8px;line-height:1.6;">Play
+            a track to see lyrics</p>
+        </div>
+      </div>
+      <div class="np-queue-header" style="margin-top:24px;">
+        <span>Up Next</span>
+      </div>
+      <div class="np-queue-list" id="np-queue-list">
+        <!-- Populated by JS with recently played tracks -->
+      </div>
+    </aside>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         FULL PLAYER BAR — Spans entire bottom
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div id="player-bar" aria-label="Now playing">
+      <!-- Progress bar -->
+      <div class="progress-track" id="progress-track" role="progressbar" aria-label="Seek">
+        <div class="progress-fill" id="progress-fill"></div>
+        <div class="progress-knob" id="progress-knob"></div>
+      </div>
+
+      <div class="player-bar-body">
+        <!-- Left: track info -->
+        <div class="pb-left">
+          <div class="player-art-wrap">
+            <img id="player-thumbnail" class="player-art-img" src="" alt="" aria-hidden="true" />
+            <div class="player-art-fallback" id="player-art-fallback">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+              </svg>
+            </div>
+          </div>
+          <div class="player-meta">
+            <p class="player-title" id="player-track-title">Nothing playing</p>
+            <p class="player-artist" id="player-track-artist">Select a track to begin</p>
+          </div>
+        </div>
+
+        <!-- Center: controls -->
+        <div class="pb-center">
+          <button class="p-btn" id="prev-btn" aria-label="Previous" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+            </svg>
+          </button>
+          <button class="p-btn p-play" id="play-pause-btn" aria-label="Play" disabled>
+            <svg id="icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5,3 19,12 5,21" />
+            </svg>
+            <svg id="icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+              <rect x="6" y="4" width="4" height="16" />
+              <rect x="14" y="4" width="4" height="16" />
+            </svg>
+          </button>
+          <button class="p-btn" id="next-btn" aria-label="Next" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Right: time + volume (desktop) -->
+        <div class="pb-right">
+          <span class="pb-time" id="pb-time-current">0:00</span>
+          <span class="pb-time-sep">/</span>
+          <span class="pb-time" id="pb-time-total">0:00</span>
+          <div class="pb-volume" id="pb-volume">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+            </svg>
+            <input type="range" id="volume-slider" min="0" max="100" value="80" class="volume-slider" />
+          </div>
+        </div>
+      </div>
+    </div><!-- /#player-bar -->
+
+    <!-- ════ MOBILE BOTTOM NAVIGATION ════════════════════════════════════ -->
+    <nav id="bottom-nav" role="navigation" aria-label="App navigation">
+      <button class="nav-item active" data-tab="home" aria-label="Home" aria-current="page">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item" data-tab="charts" aria-label="Top Charts">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+        </div>
+        <span class="nav-label">Charts</span>
+      </button>
+      <button class="nav-item" data-tab="youtube" aria-label="Search">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+        <span class="nav-label">Search</span>
+      </button>
+      <button class="nav-item" data-tab="library" aria-label="Library">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <span class="nav-label">Library</span>
+      </button>
+    </nav>
+
+  </div><!-- /#app -->
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
